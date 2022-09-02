@@ -1,0 +1,25 @@
+{% extends 'library/base.html' %}
+
+{% block content %}
+<main class="flex-shrink-0">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4">
+				<img src="{{ object.photo.url }}" id="book_img" />
+			</div>
+			<div class="col-md-8">
+				<h1>{{ object.name }}</h1>
+				<p>Автор: {{ object.author }}</p>
+				<p>Год издания: {{ object.publication_year }}</p>				
+				<p>ID книги: {{ object.id }}</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<b>Аннотация:</b>
+				<p>{{ object.annotation }}</p>
+			</div>
+		</div>
+	</div>
+</main>
+{% endblock content %}

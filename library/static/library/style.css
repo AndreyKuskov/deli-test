@@ -1,0 +1,45 @@
+#footer {
+	text-align: center;
+}
+
+#img_card {
+	height: 300px !important;
+}
+
+a { 
+	text-decoration: none !important;
+} 
+
+#navbar {
+	margin-bottom: 0.5%;
+}
+
+#login {
+	width: 25%;
+	margin: auto;
+}
+
+#login_button {
+	width: 100%;
+}
+
+#registration {
+	width: 25%;
+	margin: auto;
+}
+
+#book_img {
+	border-radius: 10px;
+	margin-bottom: 4%;
+}
+
+.invalid_feedback {
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: .875em;
+    color: #dc3545;
+}
+
+.error_class {
+	border-color: #dc3545 !important;
+}

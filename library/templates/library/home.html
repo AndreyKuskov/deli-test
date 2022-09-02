@@ -1,0 +1,23 @@
+{% extends 'library/base.html' %}
+
+{% block content %}
+	<main class="flex-shrink-0">
+	<div class="container">
+		<div class="row row-cols-1 row-cols-md-4 g-3">
+			{% for book in object_list %}
+			<a href="{% url 'book_inf' book.id %}" class="card-link">
+				<div class="col">
+					<div class="card h-100">
+						<img src="{{ book.photo.url }}" class="card-img-top" id="img_card" alt="{{ book.name }}">
+						<div class="card-body">
+							<h5 class="card-title" id="book_link">{{ book.name }}</h5>
+							<p class="card-text">{{ book.author }}</p>
+						</div>
+					</div>
+				</div>
+			</a>
+			{% endfor %}
+		</div>
+	</div>
+</main>
+{% endblock content %}

@@ -1,0 +1,60 @@
+{% extends 'library/base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+	<main class="flex-shrink-0" id="login" >
+		<div class="container" >
+			<div class="row">
+				<div class="col-md-offset-3 col-md-12">
+					<form action="" method="POST" id="log">
+						<div class="alert alert-danger d-none" role="alert"></div>
+						{% csrf_token %}
+						{% bootstrap_form form %}
+						{% bootstrap_button "Войти" button_type="submit" button_class="btn-primary" id="login_button" %}
+					</form>
+				</div>
+			</div>
+		</div>
+	</main>
+{% endblock content %}
+
+{% block scripts %}
+<script type="text/javascript">
+	$(document).ready(function () {
+		$('#log').on('submit', function(event) {
+			event.preventDefault();
+			if (validate_form()) {
+				return false
+			}
+
+			var $form = $(this);
+			$.ajax({
+				type: $form.attr('method'),
+				url: $form.attr('action'),
+				data: $form.serialize(),
+				success: function(response) {
+					window.location.href = '{% url 'home_page' %}'
+				},
+				error: function(response) {
+					$('.alert-danger').text(response.responseJSON.error).removeClass('d-none')
+				}
+			});
+		});
+
+		function validate_form() {
+				$(".invalid_feedback").remove();
+
+				// Валидация имени пользователя
+				var username = $('#id_username')
+				var flag_u = false;
+				if (username.val().length < 4) {
+					flag_u = true;
+					username.after('<div class="invalid_feedback">Имя пользователя не может быть короче 4 символов!</div>');
+					$(".invalid_feedback").css({top: username.position().top + username.outerHeight() + 2});
+				}
+				$("#id_username").toggleClass('error_class', flag_u);
+				return (flag_u)
+			}
+	})		
+</script> 
+{% endblock scripts %}

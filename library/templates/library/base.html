@@ -1,0 +1,23 @@
+{% load static %}
+{% load django_bootstrap5 %}
+
+<!DOCTYPE html>
+<html lang="ru" class="h-100">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="{% static 'library/style.css' %}">
+        <title>Мини библиотека!</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+		    {% bootstrap_css %}
+		    {% bootstrap_javascript %}
+    <link rel="canonical" href="https://getbootstrap.su/docs/5.0/examples/sticky-footer/">
+    </head>
+    <body class="d-flex flex-column h-100">
+		{% include 'library/nav.html' %}
+    {% block content %}
+    {% endblock content %}
+		{% include 'library/footer.html' %}
+    {% block scripts %}
+    {% endblock scripts %}
+    </body>
+</html>

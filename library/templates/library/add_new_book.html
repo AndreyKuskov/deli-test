@@ -1,0 +1,62 @@
+{% extends 'library/base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<main class="flex-shrink-0">
+	<div class="container">
+		<form action="" method="POST" enctype="multipart/form-data" id="add_book">
+			<div class="alert alert-danger d-none" role="alert"></div>
+			{% csrf_token %}
+			{% bootstrap_form form %}
+			{% bootstrap_button "Добавить" button_type="submit" button_class="btn-primary" id="button" %}
+		</form>
+	</div>
+</main>
+{% endblock content %}
+
+{% block scripts %}
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('#add_book').on('submit', function(event) {
+				event.preventDefault();
+				if (validate_form()) {
+					return false
+				}
+
+				var $form = $(this);
+				var formData = new FormData($('#add_book')[0]);
+				$.ajax({
+					type: $form.attr('method'),
+					url: $form.attr('action'),
+					data: formData,
+					cache:false,
+					contentType: false,
+            		processData: false,
+					success: function(response) {
+						window.location.href = '{% url 'home_page' %}'
+					},
+					error: function(response) {
+						$('.alert-danger').text(response.responseJSON.error).removeClass('d-none')
+					}
+				});
+			});
+	
+			function validate_form() {
+					$(".invalid_feedback").remove();
+	
+					// Валидация названия книги
+					var book_name = $('#id_name')
+					console.log(book_name)
+					var flag_bn = false;
+					if (book_name.val().length > 128) {
+						flag_bn = true;
+						book_name.after('<div class="invalid_feedback">Название книги не должно превышать 128 символов!</div>');
+						$(".invalid_feedback").css({top: book_name.position().top + book_name.outerHeight() + 2});
+					}
+					$("#id_name").toggleClass('error_class', flag_bn);
+
+					return (flag_bn)
+				}
+		})		
+	</script> 
+{% endblock scripts %}

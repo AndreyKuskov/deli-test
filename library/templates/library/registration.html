@@ -1,0 +1,115 @@
+{% extends 'library/base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+	<main class="flex-shrink-0" id="registration" >
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-3 col-md-12">
+					<form action="" method="POST" id="registr">
+						<div class="alert alert-danger d-none" role="alert"></div>
+						{% csrf_token %}
+						{% bootstrap_form form class="col-md-4" %}
+						{% bootstrap_button "Регистрация" button_type="submit" button_class="btn-primary" id="login_button" %}
+					</form>
+				</div>
+			</div>
+		</div>
+	</main>
+{% endblock content %}
+
+{% block scripts %}
+<script type="text/javascript">
+	$(document).ready(function () {
+		$('#registr').on('submit', function(event) {
+			event.preventDefault();
+			if (validate_form()) {
+				return false
+			}
+
+			var $form = $(this);
+			$.ajax({
+				type: $form.attr('method'),
+				url: $form.attr('action'),
+				data: $form.serialize(),
+				success: function(response) {
+					window.location.href = '{% url 'home_page' %}'
+				},
+				error: function(response) {
+					$('.alert-danger').text(response.responseJSON.error).removeClass('d-none')
+				}
+			});
+		});
+
+		function validate_form() {
+				$(".invalid_feedback").remove();
+
+				// Валидация имени пользователя
+				var username = $('#id_username')
+				var flag_u = false;
+				if (username.val().length < 4) {
+					flag_u = true;
+					username.after('<div class="invalid_feedback">Имя пользователя должно быть больше 3 символов!</div>');
+					$(".invalid_feedback").css({top: username.position().top + username.outerHeight() + 2});
+
+				}
+				$("#id_username").toggleClass('error_class', flag_u);
+
+				// Валидация поля Имя
+				var first_name = $('#id_first_name');
+				var flag_f = false
+				if (first_name.val().length === 0) {
+					flag_f = true;
+					first_name.after('<div class="invalid_feedback">Заполните это поле! Оно важно для нас!</div>');
+					$(".invalid_feedback").css({top: first_name.position().top + first_name.outerHeight() + 2});
+				}
+				$("#id_first_name").toggleClass('error_class', flag_f);
+
+				// Валидация поля Фамилия
+				var last_name = $('#id_last_name');
+				var flag_l = false;
+				if (last_name.val().length === 0) {
+					flag_l = true;
+					last_name.after('<div class="invalid_feedback">Заполните это поле! Оно важно для нас!</div>');
+					$(".invalid_feedback").css({top: last_name.position().top + last_name.outerHeight() + 2});
+				}
+				$("#id_last_name").toggleClass('error_class', flag_l);
+
+				// Валидация поля Номер телефона
+				var phone_number = $('#id_phone_number');
+				let regex = /^(\+7|7|8)?[\s\-]?\(?[489][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/;
+				var flag_ph = false;
+				if(regex.test(phone_number.val()) === 0) {
+					flag_ph = true;
+					phone_number.after('<div class="invalid_feedback">Введите корректный номер телефона!</div>');
+					$(".invalid_feedback").css({top: last_name.position().top + last_name.outerHeight() + 2});
+				}
+				$("#id_phone_number").toggleClass('error_class', flag_ph);
+
+				// Валидация паролей
+				var passwd1 = $("#id_password1");
+				var passwd2 = $("#id_password2");
+				
+				var v_pass1 = passwd1.val()?false:true;
+				var v_pass2 = passwd1.val()?false:true;
+				
+				if (passwd1.val() != passwd2.val()) {
+					v_pass1 = true;
+					v_pass2 = true;
+					passwd1.after('<div class="invalid_feedback for-pass1">Пароли должны совпадать!</div>');
+					$(".for-pass1").css({top: passwd1.position().top + passwd1.outerHeight() + 2});
+				} else if (passwd1.val().length < 8) {
+					v_pass1 = true;
+					v_pass2 = true;
+					passwd1.after('<div class="invalid_feedback for-pass1">Длина пароля не может быть меньше 8 символов!</div>');
+					$(".for-pass1").css({top: passwd1.position().top + passwd1.outerHeight() + 2});
+				} 
+				
+				$("#id_password1").toggleClass('error_class', v_pass1 );
+				$("#id_password2").toggleClass('error_class', v_pass2 );
+
+				return (flag_u || flag_f || flag_l || flag_ph || v_pass1 || v_pass2)
+			}
+	})		
+</script> 
+{% endblock scripts %}
